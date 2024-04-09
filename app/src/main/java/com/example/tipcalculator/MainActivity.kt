@@ -27,19 +27,19 @@ class MainActivity : AppCompatActivity() {
         var percentage: Int = 0
 
         binding.rbOpitionOne.setOnCheckedChangeListener { _, isChecked ->
-            if(isChecked){
+            if (isChecked) {
                 percentage = 10
             }
         }
 
-       binding.rbOptionTwo.setOnCheckedChangeListener { _, isChecked ->
-           if(isChecked){
-               percentage = 15
-           }
-       }
+        binding.rbOptionTwo.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                percentage = 15
+            }
+        }
 
         binding.rbOptionThree.setOnCheckedChangeListener { _, isChecked ->
-            if(isChecked){
+            if (isChecked) {
                 percentage = 20
             }
         }
@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
 
         var numOfPeopleSelected = 0
         binding.spinnerNumberOfPeople.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener{
+            object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
                     view: View?,
@@ -71,33 +71,46 @@ class MainActivity : AppCompatActivity() {
             }
 
 
-        binding.btnClean.setOnClickListener{
-            binding.tvResult.text = ""
-            binding.tietTotal.setText("")
-            binding.rbOpitionOne.isChecked = false
-            binding.rbOptionTwo.isChecked = false
-            binding.rbOptionThree.isChecked = false
+        binding.btnClean.setOnClickListener {
+            clean()
         }
 
-        binding.btnDone.setOnClickListener{
+        binding.btnDone.setOnClickListener {
             val totalTableTemp = binding.tietTotal.text
 
             if (totalTableTemp?.isEmpty() == true
-                ) {
+            ) {
                 Snackbar
                     .make(binding.tietTotal, "Preencha todos os campos", Snackbar.LENGTH_LONG)
                     .show()
-            }else{
+            } else {
 
-            val totalTable : Float = totalTableTemp.toString().toFloat()
-            val nPeople: Int = numOfPeopleSelected
-            
-            val totalTemp = totalTable / nPeople
-            val tips = totalTemp * percentage / 100
-            val totalWithTip = totalTemp + tips
+                val totalTable: Float = totalTableTemp.toString().toFloat()
+                val nPeople: Int = numOfPeopleSelected
 
-            binding.tvResult.text = "Valor por pessoa: $totalWithTip"
+                val totalTemp = totalTable / nPeople
+                val tips = totalTemp * percentage / 100
+                val totalWithTip = totalTemp + tips
+
+                val intent = Intent(this, SummaryActivity::class.java)
+                intent.apply {
+                    putExtra("totalTable", totalTable)
+                    putExtra("numPeople", numOfPeopleSelected)
+                    putExtra("percentage", percentage)
+                    putExtra("totalAmount", totalWithTip)
+                }
+                clean()
+                startActivity(intent)
             }
+
         }
     }
+    private fun clean(){
+        binding.tietTotal.setText("")
+        binding.rbOpitionOne.isChecked = false
+        binding.rbOptionTwo.isChecked = false
+        binding.rbOptionThree.isChecked = false
     }
+    }
+
+
