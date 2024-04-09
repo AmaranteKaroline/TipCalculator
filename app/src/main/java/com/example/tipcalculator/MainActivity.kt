@@ -1,5 +1,6 @@
 package com.example.tipcalculator
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Button
@@ -8,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.tipcalculator.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 
 class MainActivity : AppCompatActivity() {
@@ -50,15 +52,26 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnDone.setOnClickListener{
-            val totalTable: Float = binding.tietTotal.text.toString().toFloat()
-            val nPeople: Int = binding.tietNumPeople.text.toString().toInt()
+            val totalTableTemp = binding.tietTotal.text
+            val nPeopleTemp = binding.tietNumPeople.text
 
+            if (totalTableTemp?.isEmpty() == true ||
+                nPeopleTemp?.isEmpty() == true
+                ) {
+                Snackbar
+                    .make(binding.tietTotal, "Preencha todos os campos", Snackbar.LENGTH_LONG)
+                    .show()
+            }else{
+
+            val totalTable : Float = totalTableTemp.toString().toFloat()
+            val nPeople: Int = binding.tietNumPeople.text.toString().toInt()
+            
             val totalTemp = totalTable / nPeople
             val tips = totalTemp * percentage / 100
             val totalWithTip = totalTemp + tips
+
             binding.tvResult.text = "Valor por pessoa: $totalWithTip"
-
+            }
         }
-
-        }
+    }
     }
